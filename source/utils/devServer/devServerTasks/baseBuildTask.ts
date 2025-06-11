@@ -57,15 +57,16 @@ export abstract class BaseBuildTask {
 	}
 
 	protected async getExtensionsRoots(mode: BuildMode) {
-		const roots = ["extensions"];
-		if (mode === BuildMode.Prod) {
-			roots.push("iamexpat");
-			roots.push("iamexpat-dev");
-		}
 		const settings = await getSettings();
 
 		if (!settings) {
 			return;
+		}
+
+		let roots = settings.extensions_roots;
+
+		if (mode === BuildMode.Prod) {
+			roots = roots.concat(settings.prod_extensions_roots || [])
 		}
 
 		return roots.map((folder) => path.resolve(settings.root, folder));

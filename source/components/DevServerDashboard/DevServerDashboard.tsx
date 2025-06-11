@@ -1,13 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Box, Text} from 'ink';
-import {DevServer} from '../../utils/devServer/DevServer.js';
-import {StatusChangePayload} from '../../utils/devServer/interfaces.js';
-import {DashboardTask} from './DashboardTask.js';
-import {useSettings} from '../../providers/SettingsProvider.js';
-import {BuildMode} from '../../utils/devServer/devServerTasks/interface.js';
-import {DashboardBudge} from './DashboardBudge.js';
-import {DirectusStatusBudge} from './DirectusStatusBudge.js';
-import {useBusy} from '../../providers/BusyProvider.js';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, Text } from 'ink';
+import { DevServer } from '../../utils/devServer/DevServer.js';
+import { StatusChangePayload } from '../../utils/devServer/interfaces.js';
+import { DashboardTask } from './DashboardTask.js';
+import { BuildMode } from '../../utils/devServer/devServerTasks/interface.js';
+import { DashboardBudge } from './DashboardBudge.js';
+import { DirectusStatusBudge } from './DirectusStatusBudge.js';
+import { useBusy } from '../../providers/BusyProvider.js';
 
 interface Props {
 	mode?: BuildMode;
@@ -18,21 +17,20 @@ export const DevServerDashboard: React.FC<Props> = props => {
 	const [statuses, setStatuses] = useState<Record<string, StatusChangePayload>>(
 		{},
 	);
-	const {settings} = useSettings();
 	const busy = useBusy();
 
 	useEffect(() => {
 		devServer.current.onStatusChange(statuses => {
-			setStatuses({...statuses});
+			setStatuses({ ...statuses });
 		});
 
 		if (props.mode === BuildMode.Prod) {
 			busy.onBusy();
-			devServer.current.buildProd(settings.root).finally(busy.onDone);
+			devServer.current.buildProd().finally(busy.onDone);
 			return;
 		}
 
-		devServer.current.start(settings.root);
+		devServer.current.start();
 	}, []);
 
 	return (

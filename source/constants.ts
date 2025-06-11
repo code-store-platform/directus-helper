@@ -1,9 +1,10 @@
 export enum Actions {
 	StartDev = 'startDev',
-	PreCommit = 'preCommit',
+	BuildExtensions = 'buildExtensions',
 	Migrate = 'migrate',
-	CreateEndpoint = 'createEndpoint',
 	CopyToken = 'copyToken',
 	Settings = 'settings',
 	Exit = 'exit',
 }
+
+export const DEFAULT_EXTANSIONS_ROOTS = ['extensions'];

@@ -1,13 +1,17 @@
-import {Box, Text} from 'ink';
-import React from 'react';
-import TextInput, {Props as OriginalProps} from 'ink-text-input';
+import { Box, Text } from "ink";
+import React from "react";
+import TextInput, { Props as OriginalProps } from "ink-text-input";
 
 interface Props extends OriginalProps {
-	label: string;
+	label?: string;
 }
 
-export const InputWithLabel: React.FC<Props> = props => {
-	const {label, ...rest} = props;
+export const InputWithLabel: React.FC<Props> = (props) => {
+	const { label, ...rest } = props;
+
+	if (!label) {
+		return <TextInput {...rest} />;
+	}
 
 	return (
 		<Box>

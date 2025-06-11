@@ -1,35 +1,53 @@
-import React from 'react';
-import SelectInput from "ink-select-input"
-import { useInput } from 'ink';
+import React from "react";
+import SelectInput from "ink-select-input";
+import { useInput } from "ink";
 
 interface Props {
 	value?: boolean;
-	onSelect: (value: boolean) => void;
+	onSelect?: (value: boolean) => void;
+	onChange?: (value: boolean) => void;
+	focused?: boolean;
+	hideLabels?: boolean;
 }
 
 export const BooleanInput: React.FC<Props> = (props) => {
-	const options: Item[] = [{ value: true, label: 'Yes <y>' }, { value: false, label: 'No <n>' }]
+	const options: Item[] = [
+		{ value: true, label: `Yes${!props.hideLabels ? " <y>" : ""}` },
+		{ value: false, label: `No${!props.hideLabels ? " <n>" : ""}` },
+	];
 	const onSelect = (item: Item) => {
-		props.onSelect(item.value);
-	}
+		props.onSelect?.(item.value);
+	};
 
-	useInput(input => {
-		if (input.toLowerCase() === 'y') {
-			props.onSelect(true);
+	const onChange = (item: Item) => {
+		props.onChange?.(item.value);
+	};
+
+	useInput((input) => {
+		if (input.toLowerCase() === "y") {
+			props.onSelect?.(true);
 		}
 
-		if (input.toLowerCase() === 'n') {
-			props.onSelect(false);
+		if (input.toLowerCase() === "n") {
+			props.onSelect?.(false);
 		}
 	});
 
-	let initialIndex = options.findIndex(item => item.value === props.value);
+	let initialIndex = options.findIndex((item) => item.value === props.value);
 	if (initialIndex === -1) {
 		initialIndex = 0;
 	}
 
-	return <SelectInput items={options} onSelect={onSelect} initialIndex={initialIndex} />
-}
+	return (
+		<SelectInput
+			isFocused={props.focused}
+			items={options}
+			onSelect={onSelect}
+			onHighlight={onChange}
+			initialIndex={initialIndex}
+		/>
+	);
+};
 
 interface Item {
 	value: boolean;

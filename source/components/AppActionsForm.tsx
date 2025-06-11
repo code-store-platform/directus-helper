@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
-import { Box, Text, useInput } from 'ink';
-import { ActionsSelect } from './ActionsSelect.js';
-import { Actions } from '../constants.js';
-import { EndpointCreationForm } from './EndpointCreationForm.js';
-import { DevServerDashboard } from './DevServerDashboard/DevServerDashboard.js';
-import { BuildMode } from '../utils/devServer/devServerTasks/interface.js';
-import { MigratorDashboard } from './MigratorDashboard/MigratorDashboard.js';
-import { useBusy } from '../providers/BusyProvider.js';
-import { CopyTokenScreen } from './CopyTokenScreen.js';
-import { SettingsScreen } from './SettingsScreen/SettingsScreen.js';
+import React, { useState } from "react";
+import { Box, Text, useInput } from "ink";
+import { ActionsSelect } from "./ActionsSelect.js";
+import { Actions } from "../constants.js";
+import { DevServerDashboard } from "./DevServerDashboard/DevServerDashboard.js";
+import { BuildMode } from "../utils/devServer/devServerTasks/interface.js";
+import { MigratorDashboard } from "./MigratorDashboard/MigratorDashboard.js";
+import { useBusy } from "../providers/BusyProvider.js";
+import { CopyTokenScreen } from "./CopyTokenScreen.js";
+import { SettingsScreen } from "./SettingsScreen/SettingsScreen.js";
 
 export const AppActionsForm: React.FC = () => {
 	const [action, setAction] = useState<Actions>();
 	const busy = useBusy();
 
-	useInput(input => {
-		if (input === 'q') {
+	useInput((input) => {
+		if (input === "q") {
 			onClose();
 		}
 	});
@@ -40,13 +39,18 @@ export const AppActionsForm: React.FC = () => {
 	return (
 		<Box flexDirection="column" width="100%" gap={1}>
 			{action === Actions.StartDev && <DevServerDashboard />}
-			{action === Actions.Migrate && <MigratorDashboard onFinish={() => setAction(undefined)} />}
-			{action == Actions.PreCommit && (
+			{action === Actions.Migrate && (
+				<MigratorDashboard onFinish={() => setAction(undefined)} />
+			)}
+			{action == Actions.BuildExtensions && (
 				<DevServerDashboard mode={BuildMode.Prod} />
 			)}
-			{action === Actions.CreateEndpoint && <EndpointCreationForm />}
-			{action === Actions.CopyToken && <CopyTokenScreen onFinish={() => setAction(undefined)} />}
-			{action === Actions.Settings && <SettingsScreen onFinish={() => setAction(undefined)} />}
+			{action === Actions.CopyToken && (
+				<CopyTokenScreen onFinish={() => setAction(undefined)} />
+			)}
+			{action === Actions.Settings && (
+				<SettingsScreen onFinish={() => setAction(undefined)} />
+			)}
 			{!action && <ActionsSelect onSelection={handleActionSelection} />}
 			{!busy.busy && action && (
 				<Box width="100%" justifyContent="center">

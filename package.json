@@ -31,6 +31,7 @@
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
 		"@directus/sdk": "^14.0.0",
 		"@directus/types": "^11.0.3",
 		"@sindresorhus/tsconfig": "^3.0.1",

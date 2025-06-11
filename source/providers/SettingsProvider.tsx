@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { AppSettings } from '../utils/settingsUtils/interface.js';
 import { setSettings as persistSettings } from '../utils/settingsUtils/settingsUtils.js';
+import { DEFAULT_EXTANSIONS_ROOTS } from '../constants.js';
 
 interface ContextValue {
 	settings: AppSettings;
@@ -14,6 +15,8 @@ interface ContextValue {
 const initialValue: ContextValue = {
 	settings: {
 		root: '/',
+		src_dir: 'src',
+		extensions_roots: DEFAULT_EXTANSIONS_ROOTS,
 		environments: {},
 	},
 	addEnv: () => { },

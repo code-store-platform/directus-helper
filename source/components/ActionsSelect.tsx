@@ -12,8 +12,7 @@ export const ActionsSelect: React.FC<Props> = props => {
 	const items: Item[] = [
 		{ value: Actions.Migrate, label: 'Migrate' },
 		{ value: Actions.StartDev, label: 'Start dev server' },
-		{ value: Actions.PreCommit, label: 'Run precommit script' },
-		{ value: Actions.CreateEndpoint, label: 'Create Endpoint' },
+		{ value: Actions.BuildExtensions, label: 'Build extensions' },
 		{ value: Actions.CopyToken, label: 'Copy token for env' },
 		{ value: Actions.Settings, label: 'Settings' },
 		{ value: Actions.Exit, label: 'Exit' },

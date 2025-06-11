@@ -1,4 +1,4 @@
-import {AppSettings, AppSettingsSchema} from './interface.js';
+import { AppSettings, AppSettingsSchema } from './interface.js';
 import fs from 'fs/promises';
 import path from 'path';
 
