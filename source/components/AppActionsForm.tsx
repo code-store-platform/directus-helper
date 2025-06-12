@@ -12,9 +12,11 @@ import { SettingsScreen } from "./SettingsScreen/SettingsScreen.js";
 export const AppActionsForm: React.FC = () => {
 	const [action, setAction] = useState<Actions>();
 	const busy = useBusy();
+	const shouldCloseOnPressQ =
+		!busy.busy && action && action !== Actions.Settings;
 
 	useInput((input) => {
-		if (input === "q") {
+		if (input === "q" && shouldCloseOnPressQ) {
 			onClose();
 		}
 	});
@@ -52,7 +54,7 @@ export const AppActionsForm: React.FC = () => {
 				<SettingsScreen onFinish={() => setAction(undefined)} />
 			)}
 			{!action && <ActionsSelect onSelection={handleActionSelection} />}
-			{!busy.busy && action && (
+			{shouldCloseOnPressQ && (
 				<Box width="100%" justifyContent="center">
 					<Text color="gray">Press (q) to exit to the main menu</Text>
 				</Box>

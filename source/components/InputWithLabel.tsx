@@ -16,7 +16,7 @@ export const InputWithLabel: React.FC<Props> = (props) => {
 	return (
 		<Box>
 			<Box marginRight={1}>
-				<Text>{label}</Text>
+				<Text color="grey">{label}</Text>
 			</Box>
 
 			<TextInput {...rest} />

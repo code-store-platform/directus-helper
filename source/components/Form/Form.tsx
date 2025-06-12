@@ -5,6 +5,7 @@ import { BooleanInput } from "../BooleanInput.js";
 import { MultiSelectInput } from "../MultiSelectInput.js";
 import { Button } from "../Button.js";
 import { InputWithLabel } from "../InputWithLabel.js";
+import { useArrowFocus } from "../../hooks/useArrowFocus.js";
 
 interface Props {
 	title?: string;
@@ -23,6 +24,8 @@ export const Form: React.FC<Props> = (props) => {
 		{},
 	);
 	const [result, setResult] = useState(initialValue);
+	const [errors, setErrors] = useState<Record<string, string>>({});
+	useArrowFocus();
 
 	const { focusNext } = useFocusManager();
 	const onChange = (fieldName: string) => (value: unknown) => {
@@ -35,11 +38,55 @@ export const Form: React.FC<Props> = (props) => {
 	};
 
 	const onSubmit = () => {
+		const errors: Record<string, string> = {};
+		for (const field of props.fields) {
+			if (field.required && !result[field.name]) {
+				errors[field.name] = "This field is required";
+			}
+
+			if (
+				field.required &&
+				field.type === "string[]" &&
+				!(result[field.name] as string[])?.length
+			) {
+				errors[field.name] = "This field is required";
+			}
+
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			const errorMessage = field.validate?.(result[field.name] as any);
+
+			if (errorMessage) {
+				errors[field.name] = errorMessage;
+			}
+		}
+
+		if (Object.keys(errors).length) {
+			setErrors(errors);
+			return;
+		}
+
 		props.onSubmit(result);
 	};
 	const onClear = () => {
 		setResult(initialValue);
 	};
+
+	useInput((input, key) => {
+		if (key.ctrl && input === "s") {
+			onSubmit();
+			return;
+		}
+
+		if (key.ctrl && input === "q") {
+			props.onCancel?.();
+			return;
+		}
+
+		if (key.ctrl && input === "r") {
+			onClear();
+			return;
+		}
+	});
 
 	return (
 		<Box flexDirection="column" gap={2}>
@@ -54,6 +101,7 @@ export const Form: React.FC<Props> = (props) => {
 						<FieldViewContainer
 							{...field}
 							key={field.name}
+							error={errors[field.name]}
 							autoFocus={index === 0}
 							value={result[field.name]}
 							onChange={onChange(field.name)}
@@ -68,6 +116,17 @@ export const Form: React.FC<Props> = (props) => {
 				{props.onCancel && <Button text="Cancel" onClick={props.onCancel} />}
 				{props.clearable && <Button text="Clear" onClick={onClear} />}
 			</Box>
+			<Box width="100%" justifyContent="center" flexDirection="column">
+				<Text color="gray">Press (tab) to move to next field</Text>
+				<Text color="gray">Press (shift + tab) to move to prev field</Text>
+				<Text color="gray">Press (cntrl + return) to submit</Text>
+				{Boolean(props.onCancel) && (
+					<Text color="gray">Press (cntrl + q) to cancel</Text>
+				)}
+				{props.clearable && (
+					<Text color="gray">Press (cntrl + r) to reset to default value</Text>
+				)}
+			</Box>
 		</Box>
 	);
 };
@@ -76,6 +135,7 @@ type FieldViewProps<T extends Field> = T & {
 	value: unknown;
 	autoFocus?: boolean;
 	focused?: boolean;
+	error?: string;
 	onChange: (value: NonNullable<T["deafultValue"]>) => void;
 	onFinalChange: (value: NonNullable<T["deafultValue"]>) => void;
 };
@@ -97,15 +157,23 @@ const FieldViewContainer = (field: FieldViewProps<Field>) => {
 };
 
 const FieldView = <T extends Field>(field: FieldViewProps<T>) => {
+	let borderColor = field.focused ? "blue" : "grey";
+	if (field.error) {
+		borderColor = "red";
+	}
+
+	const ErrorText = field.error ? <Text color="red">{field.error}</Text> : null;
+
 	if (field.type === "string") {
 		return (
-			<Box borderColor={field.focused ? "blue" : "grey"} borderStyle="round">
+			<Box borderColor={borderColor} borderStyle="round" flexDirection="column">
 				<InputWithLabel
 					label={field.label}
 					focus={field.focused}
 					value={(field.value as string) || ""}
 					onChange={field.onChange}
 				/>
+				{ErrorText}
 			</Box>
 		);
 	}
@@ -113,7 +181,7 @@ const FieldView = <T extends Field>(field: FieldViewProps<T>) => {
 	if (field.type === "boolean") {
 		return (
 			<Box
-				borderColor={field.focused ? "blue" : "grey"}
+				borderColor={borderColor}
 				borderTop={false}
 				borderBottom={false}
 				borderRight={false}
@@ -127,6 +195,7 @@ const FieldView = <T extends Field>(field: FieldViewProps<T>) => {
 					onChange={field.onChange}
 					focused={field.focused}
 				/>
+				{ErrorText}
 			</Box>
 		);
 	}
@@ -139,6 +208,7 @@ const FieldView = <T extends Field>(field: FieldViewProps<T>) => {
 					value={(field.value || []) as string[]}
 					onChange={field.onChange}
 				/>
+				{ErrorText}
 			</Box>
 		);
 	}

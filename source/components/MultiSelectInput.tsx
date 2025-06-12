@@ -16,6 +16,10 @@ export const MultiSelectInput: React.FC<Props> = (props) => {
 	const { focus } = useFocusManager();
 
 	const onAdd = () => {
+		if (!newEntry) {
+			return;
+		}
+
 		if (props.value.includes(newEntry)) {
 			return;
 		}
@@ -37,7 +41,9 @@ export const MultiSelectInput: React.FC<Props> = (props) => {
 				onChange={setNewEntry}
 				onComplete={onAdd}
 			/>
-			<OptionsList options={props.value} onSelect={onRemove} />
+			{Boolean(props.value.length) && (
+				<OptionsList options={props.value} onSelect={onRemove} />
+			)}
 		</Box>
 	);
 };

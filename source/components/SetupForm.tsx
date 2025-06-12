@@ -7,6 +7,7 @@ import {
 	AppSettingsSchema,
 } from "../utils/settingsUtils/interface.js";
 import { Form } from "./Form/Form.js";
+import { getSettingsFields } from "../utils/getSettingsFields/getSettingsFields.js";
 
 interface Props {
 	onSubmit: (settings: AppSettings) => void;
@@ -28,45 +29,12 @@ export const SetupForm: React.FC<Props> = (props) => {
 		<Form
 			onSubmit={onSubmit}
 			title="Setup wizard"
-			fields={[
-				{
-					name: "root",
-					type: "string",
-					deafultValue: getDefaultRoot(),
-					required: true,
-					label: "Absolute path to project",
-				},
-				{
-					name: "src_dir",
-					type: "string",
-					deafultValue: "src",
-					required: true,
-					label: "Source dir",
-				},
-				{
-					name: "extensions_roots",
-					type: "string[]",
-					deafultValue: DEFAULT_EXTANSIONS_ROOTS,
-					required: true,
-					label: "Build folders names",
-				},
-				{
-					name: "prod_extensions_roots",
-					type: "string[]",
-					label: "Build folders for prod",
-				},
-				{
-					name: "notification_hook",
-					type: "string",
-					label: "Notification url",
-				},
-				{
-					name: "should_migrate_flows",
-					type: "boolean",
-					deafultValue: false,
-					label: "Should migrate flows",
-				},
-			]}
+			clearable
+			fields={getSettingsFields({
+				root: getDefaultRoot(),
+				src_dir: "src",
+				extensions_roots: DEFAULT_EXTANSIONS_ROOTS,
+			})}
 		/>
 	);
 };

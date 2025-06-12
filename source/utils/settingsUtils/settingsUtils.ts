@@ -1,8 +1,8 @@
-import { AppSettings, AppSettingsSchema } from './interface.js';
-import fs from 'fs/promises';
-import path from 'path';
+import { AppSettings, AppSettingsSchema } from "./interface.js";
+import fs from "node:fs/promises";
+import path from "node:path";
 
-const settingPath = path.resolve(process.cwd(), '.settings.json');
+const settingPath = path.resolve(process.cwd(), ".settings.json");
 let settingsPreloaded: AppSettings | null = null;
 
 export const getSettings = async () => {
@@ -14,7 +14,7 @@ export const getSettings = async () => {
 
 	try {
 		settingsRaw = JSON.parse(
-			(await fs.readFile(settingPath)).toString('utf-8'),
+			(await fs.readFile(settingPath)).toString("utf-8"),
 		);
 	} catch {
 		return null;
@@ -23,7 +23,7 @@ export const getSettings = async () => {
 	const settings = AppSettingsSchema.safeParse(settingsRaw);
 
 	if (!settings.success) {
-		console.error('Settings are corupted');
+		console.error("Settings are corupted");
 		return null;
 	}
 
@@ -33,4 +33,5 @@ export const getSettings = async () => {
 
 export const setSettings = async (setting: AppSettings) => {
 	await fs.writeFile(settingPath, JSON.stringify(setting));
+	settingsPreloaded = setting;
 };
