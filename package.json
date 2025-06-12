@@ -1,5 +1,5 @@
 {
-	"name": "directus helper",
+	"name": "directus-helper",
 	"version": "0.0.0",
 	"license": "MIT",
 	"bin": "dist/cli.js",
@@ -14,7 +14,9 @@
 		"test": "prettier --check . && xo && ava",
 		"test:w": "ava --watch"
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"dependencies": {
 		"chokidar": "^4.0.3",
 		"clipboardy": "^4.0.0",
@@ -34,6 +36,7 @@
 		"@directus/types": "^13.1.2",
 		"@sindresorhus/tsconfig": "^7.0.0",
 		"@types/chokidar": "^2.1.7",
+		"@types/deep-diff": "^1.0.5",
 		"@types/figlet": "^1.7.0",
 		"@types/react": "^19.1.8",
 		"@vdemedes/prettier-config": "^2.0.1",
@@ -53,7 +56,9 @@
 		"extensions": {
 			"ts": "module"
 		},
-		"nodeArguments": ["--import=tsimp"]
+		"nodeArguments": [
+			"--import=tsimp"
+		]
 	},
 	"xo": {
 		"extends": "xo-react",

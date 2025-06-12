@@ -3,6 +3,7 @@
 ## Install
 
 ```bash
-$ npm install --global directus-helper
+npm ci
+npm link
 ```
 
