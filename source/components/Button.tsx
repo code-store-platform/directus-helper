@@ -9,11 +9,14 @@ interface Props {
 export const Button: React.FC<Props> = (props) => {
 	const { isFocused } = useFocus();
 
-	useInput((_, key) => {
-		if (key.return && isFocused) {
-			props.onClick();
-		}
-	});
+	useInput(
+		(_, key) => {
+			if (key.return && isFocused) {
+				props.onClick();
+			}
+		},
+		{ isActive: isFocused },
+	);
 
 	return (
 		<Box

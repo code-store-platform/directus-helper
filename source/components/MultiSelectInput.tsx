@@ -53,11 +53,14 @@ const EntryInput: React.FC<
 > = (props) => {
 	const { isFocused } = useFocus({ id: props.id });
 
-	useInput((_, key) => {
-		if (key.return && isFocused) {
-			props.onComplete();
-		}
-	});
+	useInput(
+		(_, key) => {
+			if (key.return && isFocused) {
+				props.onComplete();
+			}
+		},
+		{ isActive: isFocused },
+	);
 
 	return (
 		<Box borderStyle="round" borderColor={isFocused ? "blue" : "grey"}>

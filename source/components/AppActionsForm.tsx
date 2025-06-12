@@ -15,11 +15,14 @@ export const AppActionsForm: React.FC = () => {
 	const shouldCloseOnPressQ =
 		!busy.busy && action && action !== Actions.Settings;
 
-	useInput((input) => {
-		if (input === "q" && shouldCloseOnPressQ) {
-			onClose();
-		}
-	});
+	useInput(
+		(input) => {
+			if (input === "q" && shouldCloseOnPressQ) {
+				onClose();
+			}
+		},
+		{ isActive: shouldCloseOnPressQ },
+	);
 
 	const handleActionSelection = (action: Actions) => {
 		if (action === Actions.Exit) {

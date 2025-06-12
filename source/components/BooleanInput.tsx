@@ -23,15 +23,18 @@ export const BooleanInput: React.FC<Props> = (props) => {
 		props.onChange?.(item.value);
 	};
 
-	useInput((input) => {
-		if (input.toLowerCase() === "y") {
-			props.onSelect?.(true);
-		}
+	useInput(
+		(input) => {
+			if (input.toLowerCase() === "y") {
+				props.onSelect?.(true);
+			}
 
-		if (input.toLowerCase() === "n") {
-			props.onSelect?.(false);
-		}
-	});
+			if (input.toLowerCase() === "n") {
+				props.onSelect?.(false);
+			}
+		},
+		{ isActive: !props.hideLabels && props.focused !== false },
+	);
 
 	let initialIndex = options.findIndex((item) => item.value === props.value);
 	if (initialIndex === -1) {
