@@ -1,21 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import {usePromise} from './hooks/usePromise.js';
-import {LoadingIndicator} from './components/LoadingIndicator.js';
-import {AppSettings} from './utils/settingsUtils/interface.js';
+import React, { useEffect, useState } from "react";
+import { usePromise } from "./hooks/usePromise.js";
+import { LoadingIndicator } from "./components/LoadingIndicator.js";
+import { AppSettings } from "./utils/settingsUtils/interface.js";
 import {
 	getSettings,
 	setSettings as persistSettings,
-} from './utils/settingsUtils/settingsUtils.js';
-import {SetupForm} from './components/SetupForm.js';
-import {SettingsProvider} from './providers/SettingsProvider.js';
-import {AppActionsForm} from './components/AppActionsForm.js';
-import {BusyProvider} from './providers/BusyProvider.js';
-import { Logger } from './utils/Logger/Logger.js';
+} from "./utils/settingsUtils/settingsUtils.js";
+import { SetupForm } from "./components/SetupForm.js";
+import { SettingsProvider } from "./providers/SettingsProvider.js";
+import { AppActionsForm } from "./components/AppActionsForm.js";
+import { BusyProvider } from "./providers/BusyProvider.js";
+import { Logger } from "./utils/Logger/Logger.js";
 
 export default function App() {
 	const [loading, startPromise] = usePromise();
 	const [settings, setSettings] = useState<AppSettings>();
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		startPromise(async () => {
 			const settings = await getSettings();

@@ -47,7 +47,7 @@ export const AppActionsForm: React.FC = () => {
 			{action === Actions.Migrate && (
 				<MigratorDashboard onFinish={() => setAction(undefined)} />
 			)}
-			{action == Actions.BuildExtensions && (
+			{action === Actions.BuildExtensions && (
 				<DevServerDashboard mode={BuildMode.Prod} />
 			)}
 			{action === Actions.CopyToken && (

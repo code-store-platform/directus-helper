@@ -10,6 +10,7 @@ interface Props {
 
 export const SettingsScreen: React.FC<Props> = (props) => {
 	const { settings, setSettings } = useSettings();
+	const environments = settings.environments;
 	const onSubmit = (result: Record<string, unknown>) => {
 		const settings = AppSettingsSchema.safeParse({
 			...result,
@@ -20,14 +21,17 @@ export const SettingsScreen: React.FC<Props> = (props) => {
 			return;
 		}
 
-		setSettings(settings.data);
+		setSettings({
+			...settings.data,
+			environments,
+		});
 		props.onFinish();
 	};
 
 	return (
 		<Form
 			onSubmit={onSubmit}
-			title="Setup wizard"
+			title="Settings"
 			clearable
 			onCancel={props.onFinish}
 			fields={getSettingsFields(settings)}

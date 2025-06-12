@@ -4,14 +4,12 @@ import type {
 	Snapshot,
 	SnapshotDiffWithHash,
 } from "./interfaces.js";
-import type { Flow, Role, Permission } from "@directus/types";
+import type { Flow, Role } from "@directus/types";
 import { FlowCreationTransactionBuilder } from "./FlowCreationTransactionBuilder.js";
-import { splitExisting } from "../splitExisting/splitExisting.js";
-import deepEqual from "deep-equal";
 import { Logger } from "../Logger/Logger.js";
 
 export class DirectusEnvironment {
-	constructor(private readonly credentials: DirectusEnvironmentCredentials) {}
+	constructor(private readonly credentials: DirectusEnvironmentCredentials) { }
 
 	get urlBuilder() {
 		return new UrlBuilder(this.credentials);
@@ -61,10 +59,10 @@ export class DirectusEnvironment {
 			};
 
 			return responseData.data;
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		} catch (e: any) {
 			throw new Error(
-				`Failed to parse response on diff fetch. Maybe instances are already the same\n Response text: ${
-					e.message || responseText || "<empty>"
+				`Failed to parse response on diff fetch. Maybe instances are already the same\n Response text: ${e.message || responseText || "<empty>"
 				}`,
 			);
 		}
@@ -150,115 +148,6 @@ export class DirectusEnvironment {
 		return responseData.data;
 	}
 
-	async appendRoles(roles: Role[]) {
-		const oldRoles = await this.getRoles();
-		const [existingRoles, rolesToCreate] = splitExisting(
-			oldRoles
-				.map((role) => ({ ...role, users: [] }))
-				.filter((role) => !role.admin_access),
-			roles
-				.map((role) => ({ ...role, users: [] }))
-				.filter((role) => !role.admin_access),
-			(role1, role2) => role1.id === role2.id,
-		);
-
-		const rolesToUpdate = existingRoles.filter((role) => {
-			const oldRole = oldRoles.find((oldRole) => oldRole.id === role.id);
-
-			return !deepEqual(oldRole, role);
-		});
-
-		await this.createRecords(rolesToCreate, "/roles");
-		await this.updateRecords(rolesToUpdate, "/roles");
-	}
-
-	async getPermissions() {
-		const response = await fetch(
-			this.urlBuilder
-				.setPath("/permissions")
-				.setQueryParameter("limit", "-1")
-				.build(),
-		);
-
-		if (!response.ok) {
-			throw new Error(
-				`Failed fetch permissions for the ${this.credentials.link}`,
-			);
-		}
-
-		const responseData = (await response.json()) as { data: Permission[] };
-
-		return responseData.data;
-	}
-
-	async appendPermissions(permissions: Permission[]) {
-		const oldPermissions = await this.getPermissions();
-		const compare = (perm1: Permission, perm2: Permission) => {
-			return (
-				perm1.role === perm2.role &&
-				perm1.collection === perm2.collection &&
-				perm1.action === perm2.action
-			);
-		};
-
-		const [existingPermissions, itemsToCreate] = splitExisting(
-			oldPermissions.filter((perm) => !perm.system),
-			permissions
-				.map((perm) => ({ ...perm, id: undefined }))
-				.filter((perm) => !perm.system),
-			compare,
-		);
-
-		const itemsToUpdate = existingPermissions
-			.filter((permission) => {
-				const oldItem = oldPermissions.find((oldItem) =>
-					compare(oldItem, permission),
-				);
-
-				if (!oldItem) {
-					return true;
-				}
-
-				return !deepEqual(
-					{ ...permission, id: undefined },
-					{ ...oldItem, id: undefined },
-				);
-			})
-			.map((permission) => {
-				return {
-					...permission,
-					id: oldPermissions.find((oldItem) => compare(oldItem, permission))
-						?.id,
-				};
-			});
-
-		const itemsToDelete = oldPermissions
-			.filter((oldPermission) => {
-				const isDeletedPermission = existingPermissions.find((newPermission) =>
-					compare(newPermission, oldPermission),
-				);
-
-				if (!isDeletedPermission) {
-					return true;
-				}
-
-				return !deepEqual(
-					{ ...isDeletedPermission, id: undefined },
-					{ ...oldPermission, id: undefined },
-				);
-			})
-			.filter((permission) => {
-				return oldPermissions.some(
-					(oldPermission) =>
-						compare(oldPermission, permission) && oldPermission.id,
-				);
-			});
-
-		await this.createRecords(itemsToCreate, "/permissions");
-		await this.updateRecords(itemsToUpdate, "/permissions");
-		await this.deleteRecords(itemsToDelete, "/permissions");
-	}
-
 	async applyDifference(difference: SnapshotDiffWithHash) {
 		const response = await fetch(
 			this.urlBuilder.setPath("/schema/apply").build(),
@@ -277,70 +166,6 @@ export class DirectusEnvironment {
 				response,
 				"Error occured while applying diff",
 			);
-		}
-	}
-
-	private async createRecords(itemsToCreate: unknown[], path: string) {
-		const response = await fetch(this.urlBuilder.setPath(path).build(), {
-			method: "POST",
-			body: JSON.stringify(itemsToCreate),
-			headers: { "Content-Type": "application/json" },
-		});
-
-		if (!response.ok) {
-			await this.printErrorResponse(
-				response,
-				`Failed create item for the ${path}`,
-			);
-		}
-	}
-
-	private async updateRecords<T extends { id?: unknown }>(
-		itemsToUpdate: T[],
-		path: string,
-	) {
-		for (const item of itemsToUpdate) {
-			const id = item?.id;
-
-			if (!id) {
-				continue;
-			}
-
-			const response = await fetch(
-				this.urlBuilder.setPath(`${path}/${id}`).build(),
-				{
-					method: "PATCH",
-					body: JSON.stringify(item),
-					headers: { "Content-Type": "application/json" },
-				},
-			);
-
-			if (!response.ok) {
-				await this.printErrorResponse(response, `Failed update ${path}`);
-			}
-		}
-	}
-
-	private async deleteRecords<T extends { id?: unknown }>(
-		itemsToDelete: T[],
-		path: string,
-	) {
-		for (const permission of itemsToDelete) {
-			if (!permission.id) {
-				continue;
-			}
-
-			const response = await fetch(
-				this.urlBuilder.setPath(`${path}/${permission.id}`).build(),
-				{
-					method: "DELETE",
-					headers: { "Content-Type": "application/json" },
-				},
-			);
-
-			if (!response.ok) {
-				await this.printErrorResponse(response, `Failed to delete ${path}`);
-			}
 		}
 	}
 

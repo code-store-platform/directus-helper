@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Box, Text, useFocus, useFocusManager, useInput } from "ink";
 import { Field } from "./interfaces.js";
 import { BooleanInput } from "../BooleanInput.js";
@@ -6,6 +6,7 @@ import { MultiSelectInput } from "../MultiSelectInput.js";
 import { Button } from "../Button.js";
 import { InputWithLabel } from "../InputWithLabel.js";
 import { useArrowFocus } from "../../hooks/useArrowFocus.js";
+import figlet from "figlet";
 
 interface Props {
 	title?: string;
@@ -25,6 +26,9 @@ export const Form: React.FC<Props> = (props) => {
 	);
 	const [result, setResult] = useState(initialValue);
 	const [errors, setErrors] = useState<Record<string, string>>({});
+	const title = useMemo(() => {
+		return figlet.textSync(props.title || "", { font: "Small" });
+	}, [props.title]);
 	useArrowFocus();
 
 	const { focusNext } = useFocusManager();
@@ -90,9 +94,9 @@ export const Form: React.FC<Props> = (props) => {
 
 	return (
 		<Box flexDirection="column" gap={2}>
-			{Boolean(props.title) && (
+			{Boolean(title) && (
 				<Box justifyContent="center">
-					<Text>{props.title}</Text>
+					<Text>{title}</Text>
 				</Box>
 			)}
 			<Box flexDirection="column" gap={1}>
