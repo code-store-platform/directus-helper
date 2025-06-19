@@ -18,7 +18,7 @@
 		"dist"
 	],
 	"dependencies": {
-		"chokidar": "^4.0.3",
+		"chokidar": "^3.6.0",
 		"clipboardy": "^4.0.0",
 		"figlet": "^1.8.1",
 		"ink": "^6.0.0",
