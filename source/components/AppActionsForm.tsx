@@ -7,13 +7,14 @@ import { BuildMode } from "../utils/devServer/devServerTasks/interface.js";
 import { MigratorDashboard } from "./MigratorDashboard/MigratorDashboard.js";
 import { useBusy } from "../providers/BusyProvider.js";
 import { CopyTokenScreen } from "./CopyTokenScreen.js";
-import { SettingsScreen } from "./SettingsScreen/SettingsScreen.js";
+import { ProjectSettingsScreen } from "./SettingsScreen/SettingsScreen.js";
+import { ProjectCreationDashboard } from "./ProjectCreationDashboard/ProjectCreationDashboard.js";
 
 export const AppActionsForm: React.FC = () => {
 	const [action, setAction] = useState<Actions>();
 	const busy = useBusy();
 	const shouldCloseOnPressQ =
-		!busy.busy && action && action !== Actions.Settings;
+		!busy.busy && action && action !== Actions.ProjectSettings;
 
 	useInput(
 		(input) => {
@@ -53,8 +54,11 @@ export const AppActionsForm: React.FC = () => {
 			{action === Actions.CopyToken && (
 				<CopyTokenScreen onFinish={() => setAction(undefined)} />
 			)}
-			{action === Actions.Settings && (
-				<SettingsScreen onFinish={() => setAction(undefined)} />
+			{action === Actions.CreateProject && (
+				<ProjectCreationDashboard onFinish={() => setAction(undefined)} />
+			)}
+			{action === Actions.ProjectSettings && (
+				<ProjectSettingsScreen onFinish={() => setAction(undefined)} />
 			)}
 			{!action && <ActionsSelect onSelection={handleActionSelection} />}
 			{shouldCloseOnPressQ && (

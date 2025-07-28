@@ -1,23 +1,28 @@
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 export class Logger {
-	private static path = "/";
+	private static path = process.cwd();
 
 	private get logFilePath() {
-		return path.resolve(Logger.path, "logs.log");
-	}
+		if (!Logger.path) {
+			return undefined;
+		}
 
-	static setPath(path: string) {
-		Logger.path = path;
+		return path.resolve(Logger.path, "logs.log");
 	}
 
 	async logText(text: string, prefix = "TEXT") {
 		let fileContent = "";
 
+		console.log("path", this.logFilePath);
+		if (!this.logFilePath) {
+			return;
+		}
+
 		try {
 			fileContent = (await fs.readFile(this.logFilePath)).toString();
-		} catch {}
+		} catch { }
 
 		const newContent = [
 			fileContent.toString(),
@@ -46,6 +51,6 @@ export class Logger {
 	private generateLogHeader(prefix: string) {
 		const now = new Date();
 
-		return `[${prefix} TIme: ${now.toUTCString()}]`;
+		return `[${prefix} TIME: ${now.toUTCString()}]`;
 	}
 }

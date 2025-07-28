@@ -29,7 +29,7 @@ export class Migrator {
 			await target.applyDifference(diff);
 		}
 
-		if (this.settings.should_migrate_flows) {
+		if (this.settings.global.should_migrate_flows) {
 			this.notifyStatusChange?.("Obtaining flows");
 			const flows = await src.getFlows();
 			this.notifyStatusChange?.("Appling flows");

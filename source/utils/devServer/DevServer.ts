@@ -1,5 +1,5 @@
 import chokidar from "chokidar";
-import path from "path";
+import path from "node:path";
 import { HookBuildTask } from "./devServerTasks/hooksBuildTask.js";
 import { EndpointBuildTask } from "./devServerTasks/endpointBuildTask.js";
 import {
@@ -24,8 +24,9 @@ export class DevServer {
 
 	async start() {
 		const settings = await getSettings();
+		const projectSettings = settings.project;
 
-		if (!settings) {
+		if (!projectSettings) {
 			return;
 		}
 
@@ -36,10 +37,13 @@ export class DevServer {
 			});
 
 			chokidar
-				.watch(path.resolve(settings.root, settings.src_dir, task.trigger), {
-					ignored: ["**/node_modules/**/*", "**/.git/**/*", "**/dist/**/*"],
-					ignoreInitial: true,
-				})
+				.watch(
+					path.resolve(process.cwd(), projectSettings.src_dir, task.trigger),
+					{
+						ignored: ["**/node_modules/**/*", "**/.git/**/*", "**/dist/**/*"],
+						ignoreInitial: true,
+					},
+				)
 				.on("all", (_, path) => {
 					task.perform(path, BuildMode.Dev);
 				});
@@ -48,13 +52,18 @@ export class DevServer {
 
 	async buildProd() {
 		const settings = await getSettings();
+		const projectSettings = settings.project;
 
-		if (!settings) {
+		if (!projectSettings) {
 			return;
 		}
 
 		for (const task of this.tasks) {
-			const taskRoot = path.resolve(settings.root, settings.src_dir, task.trigger);
+			const taskRoot = path.resolve(
+				process.cwd(),
+				projectSettings.src_dir,
+				task.trigger,
+			);
 			this.appendStatusListener(task);
 			task.perform(taskRoot, BuildMode.Prod);
 		}

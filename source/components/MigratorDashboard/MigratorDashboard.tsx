@@ -1,11 +1,11 @@
-import { Box, Text } from 'ink';
-import React, { useState } from 'react';
-import { Migrator } from '../../utils/migrator/Migrator.js';
-import { useSettings } from '../../providers/SettingsProvider.js';
-import { useBoolean } from '../../hooks/useBoolean.js';
-import Spinner from 'ink-spinner';
-import { useBusy } from '../../providers/BusyProvider.js';
-import { MigrationWizard } from './MigrationWizard.js';
+import { Box, Text } from "ink";
+import React, { useState } from "react";
+import { Migrator } from "../../utils/migrator/Migrator.js";
+import { useSettings } from "../../providers/SettingsProvider.js";
+import { useBoolean } from "../../hooks/useBoolean.js";
+import Spinner from "ink-spinner";
+import { useBusy } from "../../providers/BusyProvider.js";
+import { MigrationWizard } from "./MigrationWizard.js";
 
 interface Props {
 	onFinish: () => void;
@@ -18,36 +18,39 @@ export const MigratorDashboard: React.FC<Props> = (props) => {
 	const inProgress = useBoolean();
 	const busy = useBusy();
 
-	const startMigration = (srcName: string, targetName: string, shouldNotifify: boolean) => {
+	const startMigration = (
+		srcName: string,
+		targetName: string,
+		shouldNotifify: boolean,
+	) => {
 		const migrator = new Migrator(settings);
 
 		busy.onBusy();
 		migrator.onStatusChange(setStatus);
 		inProgress.setTrue();
-		setStatus('Starting...');
+		setStatus("Starting...");
 		migrator
 			.migrate(srcName, targetName)
 			.then(async () => {
-				const notificationHook = settings.notification_hook;
+				const notificationHook = settings.global.notification_hook;
 
 				if (notificationHook && shouldNotifify) {
-					setStatus('Sending notification...')
+					setStatus("Sending notification...");
 					await fetch(notificationHook);
 				}
 
 				props.onFinish();
 			})
-			.catch(e => {
+			.catch((e) => {
 				setError(e.message);
 			})
 			.finally(async () => {
-
-				busy.onDone()
+				busy.onDone();
 			});
 	};
 
 	if (!inProgress.value) {
-		return <MigrationWizard onSetupDone={startMigration} />
+		return <MigrationWizard onSetupDone={startMigration} />;
 	}
 
 	if (error) {

@@ -1,23 +1,29 @@
-import React from 'react';
+import React from "react";
 import SelectInput from "ink-select-input";
-import clipboard from 'clipboardy';
+import clipboard from "clipboardy";
 import { useSettings } from "../providers/SettingsProvider.js";
 
 interface Props {
 	onFinish: () => void;
 }
 
-export const CopyTokenScreen: React.FC<Props> = props => {
+export const CopyTokenScreen: React.FC<Props> = (props) => {
 	const { onFinish } = props;
 	const settings = useSettings();
-	const items: Item[] = Object.entries(settings.settings.environments).map(entry => {
-		const [name, data] = entry;
+	const items = Object.entries(settings.settings.global.environments)
+		.map((entry) => {
+			const [name, data] = entry;
 
-		return {
-			label: name,
-			value: data.token
-		}
-	})
+			if (!("token" in data)) {
+				return;
+			}
+
+			return {
+				label: name,
+				value: data.token,
+			};
+		})
+		.filter(Boolean) as Item[];
 
 	const handleSelect = (item: Item) => {
 		clipboard.writeSync(item.value);

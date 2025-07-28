@@ -1,7 +1,7 @@
 import { DevServerTaskStatus } from "../interfaces.js";
 import { exec } from "node:child_process";
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { BuildMode, StatusChangeCallback } from "./interface.js";
 import { getSettings } from "../../settingsUtils/settingsUtils.js";
 
@@ -58,18 +58,19 @@ export abstract class BaseBuildTask {
 
 	protected async getExtensionsRoots(mode: BuildMode) {
 		const settings = await getSettings();
+		const projectSettings = settings.project;
 
-		if (!settings) {
+		if (!projectSettings) {
 			return;
 		}
 
-		let roots = settings.extensions_roots;
+		let targets = projectSettings.dev_targets;
 
 		if (mode === BuildMode.Prod) {
-			roots = roots.concat(settings.prod_extensions_roots || [])
+			targets = targets.concat(projectSettings.targets || []);
 		}
 
-		return roots.map((folder) => path.resolve(settings.root, folder));
+		return targets.map((folder) => path.resolve(process.cwd(), folder));
 	}
 
 	protected async copyBuild(targetPath: string, srcPath: string) {

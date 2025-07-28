@@ -1,62 +1,29 @@
 import { Field } from "../../components/Form/interfaces.js";
 import { AppSettings } from "../settingsUtils/interface.js";
-import zod from "zod";
 
-export const getSettingsFields = (
-	settings: Omit<AppSettings, "environments">,
+export const getProjectSettingsFields = (
+	settings: AppSettings["project"],
 ): Field[] => {
 	return [
 		{
-			name: "root",
-			type: "string",
-			deafultValue: settings.root,
-			required: true,
-			label: "Absolute path to project",
-		},
-		{
 			name: "src_dir",
 			type: "string",
-			deafultValue: settings.src_dir,
+			deafultValue: settings?.src_dir,
 			required: true,
 			label: "Source dir",
 		},
 		{
-			name: "extensions_roots",
+			name: "dev_targets",
 			type: "string[]",
-			deafultValue: settings.extensions_roots,
+			deafultValue: settings?.dev_targets,
 			required: true,
 			label: "Build folders names",
 		},
 		{
-			name: "prod_extensions_roots",
+			name: "targets",
 			type: "string[]",
 			label: "Build folders for prod",
-			deafultValue: settings.prod_extensions_roots,
-		},
-		{
-			name: "notification_hook",
-			type: "string",
-			label: "Notification url",
-			deafultValue: settings.notification_hook,
-			validate: (url) => {
-				if (!url) {
-					return;
-				}
-
-				const valid = zod.string().url().safeParse(url).success;
-
-				if (valid) {
-					return;
-				}
-
-				return "This field should contain URL";
-			},
-		},
-		{
-			name: "should_migrate_flows",
-			type: "boolean",
-			deafultValue: !!settings.should_migrate_flows,
-			label: "Should migrate flows",
+			deafultValue: settings?.targets,
 		},
 	];
 };

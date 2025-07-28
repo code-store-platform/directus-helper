@@ -1,15 +1,64 @@
 import { UrlBuilder } from "./UrlBuilder.js";
 import type {
 	DirectusEnvironmentCredentials,
+	LoginPasswordDirectusEnvironmentCredentials,
 	Snapshot,
 	SnapshotDiffWithHash,
+	TokenDirectusEnvironmentCredentials,
 } from "./interfaces.js";
 import type { Flow, Role } from "@directus/types";
 import { FlowCreationTransactionBuilder } from "./FlowCreationTransactionBuilder.js";
 import { Logger } from "../Logger/Logger.js";
 
 export class DirectusEnvironment {
-	constructor(private readonly credentials: DirectusEnvironmentCredentials) { }
+	static async create(
+		credentials: DirectusEnvironmentCredentials,
+	): Promise<DirectusEnvironment> {
+		if ("token" in credentials) {
+			return new DirectusEnvironment(credentials);
+		}
+
+		const token =
+			await DirectusEnvironment.getTokenByLoginPassword(credentials);
+		return new DirectusEnvironment({ link: credentials.link, token });
+	}
+
+	private static async getTokenByLoginPassword(
+		credentials: LoginPasswordDirectusEnvironmentCredentials,
+	) {
+		const authData: Record<string, string> = {
+			email: credentials.login,
+			password: credentials.password,
+			mode: "json",
+		};
+
+		const requestUrl = new URL("/auth/login", credentials.link);
+
+		type Response = {
+			data: {
+				access_token: string | null;
+			};
+		};
+		const response: Response = await fetch(requestUrl, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(authData),
+		}).then((response) => response.json());
+
+		const token = response.data.access_token;
+
+		if (!token) {
+			throw new Error("Failed to obtain token");
+		}
+
+		return token;
+	}
+
+	constructor(
+		private readonly credentials: TokenDirectusEnvironmentCredentials,
+	) { }
 
 	get urlBuilder() {
 		return new UrlBuilder(this.credentials);

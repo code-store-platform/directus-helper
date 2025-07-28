@@ -1,11 +1,13 @@
-import type {DirectusEnvironmentCredentials} from './interfaces.js';
+import type { TokenDirectusEnvironmentCredentials } from "./interfaces.js";
 
 export class UrlBuilder {
-	private path = '';
+	private path = "";
 	private searchParams: Record<string, string> = {};
 
-	constructor(private readonly credentials: DirectusEnvironmentCredentials) {
-		this.setQueryParameter('access_token', credentials.token);
+	constructor(
+		private readonly credentials: TokenDirectusEnvironmentCredentials,
+	) {
+		this.setQueryParameter("access_token", credentials.token);
 	}
 
 	setPath(path: string) {
@@ -30,8 +32,8 @@ export class UrlBuilder {
 		}
 
 		const searchParamsString = searchParamsParts.length
-			? '?' + searchParamsParts.join('&')
-			: '';
+			? `?${searchParamsParts.join("&")}`
+			: "";
 		const url = new URL(this.credentials.link + this.path + searchParamsString);
 
 		return url.toString();

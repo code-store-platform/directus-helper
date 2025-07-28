@@ -1,29 +1,25 @@
 import React from "react";
 import { useSettings } from "../../providers/SettingsProvider.js";
-import { getSettingsFields } from "../../utils/getSettingsFields/getSettingsFields.js";
-import { AppSettingsSchema } from "../../utils/settingsUtils/interface.js";
+import { AppProjectSettingsSchema } from "../../utils/settingsUtils/interface.js";
 import { Form } from "../Form/Form.js";
+import { getProjectSettingsFields } from "../../utils/getSettingsFields/getSettingsFields.js";
 
 interface Props {
 	onFinish: () => void;
 }
 
-export const SettingsScreen: React.FC<Props> = (props) => {
+export const ProjectSettingsScreen: React.FC<Props> = (props) => {
 	const { settings, setSettings } = useSettings();
-	const environments = settings.environments;
 	const onSubmit = (result: Record<string, unknown>) => {
-		const settings = AppSettingsSchema.safeParse({
-			...result,
-			environments: {},
-		});
+		const projectSettings = AppProjectSettingsSchema.safeParse(result);
 
-		if (!settings.success) {
+		if (!projectSettings.success) {
 			return;
 		}
 
 		setSettings({
-			...settings.data,
-			environments,
+			...settings,
+			project: projectSettings.data,
 		});
 		props.onFinish();
 	};
@@ -31,10 +27,10 @@ export const SettingsScreen: React.FC<Props> = (props) => {
 	return (
 		<Form
 			onSubmit={onSubmit}
-			title="Settings"
+			title="Project Settings"
 			clearable
 			onCancel={props.onFinish}
-			fields={getSettingsFields(settings)}
+			fields={getProjectSettingsFields(settings.project)}
 		/>
 	);
 };

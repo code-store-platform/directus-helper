@@ -1,37 +1,52 @@
-import { AppSettings, AppSettingsSchema } from "./interface.js";
+import {
+	AppGlobalSettingsSchema,
+	AppProjectSettingsSchema,
+	AppSettings,
+} from "./interface.js";
 import fs from "node:fs/promises";
 import path from "node:path";
+import os from "node:os";
+import { safeTryPromise } from "../safeTry/safeTry.js";
 
-const settingPath = path.resolve(process.cwd(), ".settings.json");
+export const globalSettingsPath = path.resolve(
+	os.homedir(),
+	"./.config/.directus.helper.settings",
+); // todo: make cross platform;
+const projectSettingsPath = path.resolve(process.cwd(), ".settings.json");
 let settingsPreloaded: AppSettings | null = null;
 
-export const getSettings = async () => {
+export const getSettings = async (): Promise<AppSettings> => {
 	if (settingsPreloaded) {
 		return settingsPreloaded;
 	}
 
-	let settingsRaw: object = {};
+	let [globalSettings] = await safeTryPromise(async () =>
+		AppGlobalSettingsSchema.parse(
+			JSON.parse((await fs.readFile(globalSettingsPath)).toString("utf-8")),
+		),
+	);
 
-	try {
-		settingsRaw = JSON.parse(
-			(await fs.readFile(settingPath)).toString("utf-8"),
-		);
-	} catch {
-		return null;
+	const [projectSettings] = await safeTryPromise(async () =>
+		AppProjectSettingsSchema.parse(
+			JSON.parse((await fs.readFile(projectSettingsPath)).toString("utf-8")),
+		),
+	);
+
+	if (!globalSettings) {
+		globalSettings = {
+			environments: {},
+		};
+		await fs.writeFile(globalSettingsPath, JSON.stringify(globalSettings));
 	}
 
-	const settings = AppSettingsSchema.safeParse(settingsRaw);
-
-	if (!settings.success) {
-		console.error("Settings are corupted");
-		return null;
-	}
-
-	settingsPreloaded = settings.data;
-	return settings.data;
+	return { global: globalSettings, project: projectSettings };
 };
 
-export const setSettings = async (setting: AppSettings) => {
-	await fs.writeFile(settingPath, JSON.stringify(setting));
-	settingsPreloaded = setting;
+export const setSettings = async (settings: AppSettings) => {
+	await fs.writeFile(globalSettingsPath, JSON.stringify(settings.global));
+	if (settings.project) {
+		await fs.writeFile(projectSettingsPath, JSON.stringify(settings.project));
+	}
+
+	settingsPreloaded = settings;
 };
