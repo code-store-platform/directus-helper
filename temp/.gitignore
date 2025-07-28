@@ -1,6 +1,0 @@
-extensions
-data
-/.idea/
-**/.settings.json
-**/logs.log
-.DS_Store
