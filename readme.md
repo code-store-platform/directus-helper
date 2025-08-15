@@ -11,7 +11,7 @@ npm link
 ## How it works?
 After helper instalation and first run you can observe a new file in your
 * macOS: ~/Library/Preferences/directus-helper-nodejs/.settings.json
-* Windows: %APPDATA%\directus-helper-nodejs\Config (for example, C:\Users\USERNAME\AppData\Roaming\MyApp-nodejs\Config)
+* Windows: %APPDATA%\directus-helper-nodejs\Config
 * Linux: ~/.config/directus-helper-nodejs (or $XDG_CONFIG_HOME/directus-helper-nodejs )
 
 This config will hold tokens for your environments and settings for migration script
