@@ -20,6 +20,7 @@
 	"dependencies": {
 		"chokidar": "^3.6.0",
 		"clipboardy": "^4.0.0",
+		"env-paths": "^3.0.0",
 		"figlet": "^1.8.1",
 		"ink": "^6.0.0",
 		"ink-link": "^4.1.0",

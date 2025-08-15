@@ -39,9 +39,12 @@ export const SettingsProvider: React.FC<
 	const addEnv: ContextValue["addEnv"] = (name, config) => {
 		updateSettings((prevState) => ({
 			...prevState,
-			environments: {
-				...prevState.global.environments,
-				[name]: config,
+			global: {
+				...prevState.global,
+				environments: {
+					...prevState.global.environments,
+					[name]: config,
+				},
 			},
 		}));
 	};
