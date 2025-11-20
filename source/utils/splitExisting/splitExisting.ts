@@ -7,7 +7,7 @@ export const splitExisting = <T>(
 	const newItemsResult = [];
 
 	for (const item of itemsToSplit) {
-		const itemExists = existing.some(existingItem =>
+		const itemExists = existing.some((existingItem) =>
 			compare(existingItem, item),
 		);
 

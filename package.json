@@ -1,6 +1,6 @@
 {
 	"name": "directus-helper",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"license": "MIT",
 	"bin": "dist/cli.js",
 	"type": "module",
@@ -12,11 +12,10 @@
 		"build": "tsc",
 		"dev": "tsc --watch",
 		"test": "prettier --check . && xo && ava",
-		"test:w": "ava --watch"
+		"test:w": "ava --watch",
+		"format": "npx @biomejs/biome format --write"
 	},
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"dependencies": {
 		"chokidar": "^3.6.0",
 		"clipboardy": "^4.0.0",
@@ -57,9 +56,7 @@
 		"extensions": {
 			"ts": "module"
 		},
-		"nodeArguments": [
-			"--import=tsimp"
-		]
+		"nodeArguments": ["--import=tsimp"]
 	},
 	"xo": {
 		"extends": "xo-react",

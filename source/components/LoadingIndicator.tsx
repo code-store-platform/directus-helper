@@ -1,12 +1,12 @@
-import React from 'react';
-import {Text} from 'ink';
-import Spinner from 'ink-spinner';
+import React from "react";
+import { Text } from "ink";
+import Spinner from "ink-spinner";
 
 interface Props {
 	label: string;
 }
 
-export const LoadingIndicator: React.FC<Props> = props => {
+export const LoadingIndicator: React.FC<Props> = (props) => {
 	return (
 		<Text>
 			<Text color="green">

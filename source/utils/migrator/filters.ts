@@ -1,5 +1,5 @@
-import {Diff} from 'deep-diff';
-import {Collection, DiffKind, SnapshotField} from './interfaces.js';
+import { Diff } from "deep-diff";
+import { Collection, DiffKind, SnapshotField } from "./interfaces.js";
 
 export const filterCollections = (
 	collections: {
@@ -8,21 +8,21 @@ export const filterCollections = (
 	}[],
 ) => {
 	return collections
-		.map(collections => {
+		.map((collections) => {
 			return {
 				...collections,
 				diff: collections.diff.filter(
-					diff =>
+					(diff) =>
 						!(
 							diff.kind === DiffKind.EDIT &&
-							['color', 'group', 'hidden', 'icon'].includes(
-								diff?.path?.at(-1) || '',
+							["color", "group", "hidden", "icon"].includes(
+								diff?.path?.at(-1) || "",
 							)
 						),
 				),
 			};
 		})
-		.filter(collection => collection.diff.length);
+		.filter((collection) => collection.diff.length);
 };
 
 export const filterFields = (
@@ -33,19 +33,19 @@ export const filterFields = (
 	}[],
 ) => {
 	return fields
-		.map(field => {
+		.map((field) => {
 			return {
 				...field,
 				diff: field.diff.filter(
-					diff =>
+					(diff) =>
 						diff.kind !== DiffKind.EDIT ||
-						!['color', 'group', 'hidden', 'icon'].includes(
-							diff?.path?.at(-1) || '',
+						!["color", "group", "hidden", "icon"].includes(
+							diff?.path?.at(-1) || "",
 						),
 				),
 			};
 		})
-		.filter(field => field.diff.length);
+		.filter((field) => field.diff.length);
 };
 
 export const filterFieldsFolder = (
@@ -56,26 +56,26 @@ export const filterFieldsFolder = (
 	}[],
 ) => {
 	return fields
-		.map(field => {
+		.map((field) => {
 			const newField = {
 				...field,
 				diff: field.diff.filter(
-					diff =>
+					(diff) =>
 						diff.kind !== DiffKind.EDIT ||
-						!['folder'].includes(diff?.path?.at(-1) || ''),
+						!["folder"].includes(diff?.path?.at(-1) || ""),
 				),
 			};
 
 			if (
-				field.collection === 'directus_users' &&
-				field.field === 'links-k_t2aw'
+				field.collection === "directus_users" &&
+				field.field === "links-k_t2aw"
 			) {
 				newField.diff = newField.diff.filter(
-					diff => diff.kind !== DiffKind.EDIT,
+					(diff) => diff.kind !== DiffKind.EDIT,
 				);
 			}
 
 			return newField;
 		})
-		.filter(field => field.diff.length);
+		.filter((field) => field.diff.length);
 };

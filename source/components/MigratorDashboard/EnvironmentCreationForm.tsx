@@ -1,18 +1,18 @@
-import React, {useState} from 'react';
-import zod from 'zod';
-import {Box, Text} from 'ink';
-import {EnvironmentConfiguration} from '../../utils/settingsUtils/interface.js';
-import {InputWithLabel} from '../InputWithLabel.js';
-import {useBoolean} from '../../hooks/useBoolean.js';
+import React, { useState } from "react";
+import zod from "zod";
+import { Box, Text } from "ink";
+import { EnvironmentConfiguration } from "../../utils/settingsUtils/interface.js";
+import { InputWithLabel } from "../InputWithLabel.js";
+import { useBoolean } from "../../hooks/useBoolean.js";
 
 interface Props {
 	onCreate: (name: string, configuration: EnvironmentConfiguration) => void;
 }
 
-export const EnvironmentCreationForm: React.FC<Props> = props => {
-	const [name, setName] = useState('');
-	const [link, setLink] = useState('');
-	const [token, setToken] = useState('');
+export const EnvironmentCreationForm: React.FC<Props> = (props) => {
+	const [name, setName] = useState("");
+	const [link, setLink] = useState("");
+	const [token, setToken] = useState("");
 
 	const [linkError, setLinkError] = useState<string>();
 
@@ -36,7 +36,7 @@ export const EnvironmentCreationForm: React.FC<Props> = props => {
 			return;
 		}
 
-		setLinkError('Invalid format');
+		setLinkError("Invalid format");
 	};
 
 	const onTokenDone = () => {

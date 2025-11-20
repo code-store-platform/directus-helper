@@ -1,12 +1,12 @@
-import React from 'react';
-import {Box, Text, TextProps} from 'ink';
+import React from "react";
+import { Box, Text, TextProps } from "ink";
 
 interface Props extends TextProps {
 	content?: string;
 }
 
-export const DashboardBudge: React.FC<Props> = props => {
-	const {content, children, ...rest} = props;
+export const DashboardBudge: React.FC<Props> = (props) => {
+	const { content, children, ...rest } = props;
 
 	return (
 		<Box width="100%" justifyContent="flex-end">
@@ -18,7 +18,7 @@ export const DashboardBudge: React.FC<Props> = props => {
 				borderRight
 				borderBottom
 				borderStyle="round"
-				borderColor={rest.color || 'blue'}
+				borderColor={rest.color || "blue"}
 			>
 				{content ? <Text {...rest}>{content}</Text> : null}
 				{children}

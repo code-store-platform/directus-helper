@@ -1,5 +1,5 @@
-import {getWords} from '../getWords/getWords.js';
+import { getWords } from "../getWords/getWords.js";
 
 export const toKebabCase = (input: string) => {
-	return getWords(input).join('-');
+	return getWords(input).join("-");
 };

@@ -22,7 +22,7 @@ export class Logger {
 
 		try {
 			fileContent = (await fs.readFile(this.logFilePath)).toString();
-		} catch { }
+		} catch {}
 
 		const newContent = [
 			fileContent.toString(),

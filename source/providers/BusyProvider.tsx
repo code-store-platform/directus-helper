@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { useBoolean } from '../hooks/useBoolean.js';
+import React, { useContext, useEffect } from "react";
+import { useBoolean } from "../hooks/useBoolean.js";
 
 interface ContextValue {
 	busy: boolean;
@@ -9,8 +9,8 @@ interface ContextValue {
 
 const initialValue: ContextValue = {
 	busy: false,
-	onBusy: () => { },
-	onDone: () => { },
+	onBusy: () => {},
+	onDone: () => {},
 };
 
 const BusyContext = React.createContext(initialValue);
@@ -24,11 +24,11 @@ export const useBusyEffect = () => {
 
 		return () => {
 			busy.onDone();
-		}
-	})
-}
+		};
+	});
+};
 
-export const BusyProvider: React.FC<React.PropsWithChildren> = props => {
+export const BusyProvider: React.FC<React.PropsWithChildren> = (props) => {
 	const { children } = props;
 	const busy = useBoolean(false);
 

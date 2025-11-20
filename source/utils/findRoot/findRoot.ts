@@ -1,4 +1,4 @@
-import path from 'path';
+import path from "path";
 
 export const findRoot = (
 	start: string,
@@ -13,17 +13,17 @@ export const findRoot = (
 			return startPath;
 		}
 
-		startPath = path.resolve(startPath, '..');
+		startPath = path.resolve(startPath, "..");
 	}
 
 	return null;
 };
 
 const buildPathLevelSufix = (level: number) => {
-	let result = '';
+	let result = "";
 
 	for (let i = 0; i < level; i++) {
-		result += '../';
+		result += "../";
 	}
 
 	return result;

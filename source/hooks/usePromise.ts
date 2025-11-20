@@ -1,5 +1,5 @@
-import {useCallback} from 'react';
-import {useBoolean} from './useBoolean.js';
+import { useCallback } from "react";
+import { useBoolean } from "./useBoolean.js";
 
 export const usePromise = (): [
 	boolean,

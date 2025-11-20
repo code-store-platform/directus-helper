@@ -1,7 +1,7 @@
-import net from 'net';
+import net from "net";
 
 export const ping = (domain: string, port: number): Promise<boolean> => {
-	return new Promise(res => {
+	return new Promise((res) => {
 		const socket = new net.Socket();
 
 		socket.setTimeout(250);
@@ -10,9 +10,9 @@ export const ping = (domain: string, port: number): Promise<boolean> => {
 			socket.destroy();
 		};
 
-		socket.on('connect', resWith(true));
-		socket.on('error', resWith(false));
-		socket.on('timeout', resWith(false));
+		socket.on("connect", resWith(true));
+		socket.on("error", resWith(false));
+		socket.on("timeout", resWith(false));
 
 		socket.connect(port, domain);
 	});

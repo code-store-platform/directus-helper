@@ -1,10 +1,10 @@
 export const getWords = (name: string) => {
-	const separators = ['-', ' ', '_'];
+	const separators = ["-", " ", "_"];
 
-	let word = '';
+	let word = "";
 	let words: string[] = [];
 
-	for (const char of name.split('')) {
+	for (const char of name.split("")) {
 		const isUpperCase = char.toUpperCase() === char;
 
 		if (!isUpperCase) {
@@ -21,8 +21,8 @@ export const getWords = (name: string) => {
 	}
 
 	for (const sep of separators) {
-		words = words.flatMap(word => word.split(sep));
+		words = words.flatMap((word) => word.split(sep));
 	}
 
-	return words.map(word => word.toLowerCase().trim()).filter(Boolean);
+	return words.map((word) => word.toLowerCase().trim()).filter(Boolean);
 };

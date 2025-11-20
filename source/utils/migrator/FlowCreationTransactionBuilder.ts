@@ -1,7 +1,7 @@
-import type {Flow} from '@directus/types';
+import type { Flow } from "@directus/types";
 
 interface TransactionItem {
-	method: 'POST' | 'PATCH';
+	method: "POST" | "PATCH";
 	path: string;
 	payload: unknown;
 }
@@ -39,7 +39,7 @@ export class FlowCreationTransactionBuilder {
 		const root = this.getRoot();
 
 		this.queue.push({
-			method: 'PATCH',
+			method: "PATCH",
 			path: `/${root.id}`,
 			payload: root,
 		});
@@ -49,8 +49,8 @@ export class FlowCreationTransactionBuilder {
 		const root = this.getRoot();
 
 		this.queue.push({
-			method: 'POST',
-			path: '/',
+			method: "POST",
+			path: "/",
 			payload: root,
 		});
 	}
@@ -67,7 +67,7 @@ export class FlowCreationTransactionBuilder {
 		const resolvedOperation: string[] = [];
 
 		while (operations.length !== resolvedOperation.length) {
-			operations.forEach(operation => {
+			operations.forEach((operation) => {
 				if (resolvedOperation.includes(operation.id)) {
 					return;
 				}
@@ -83,12 +83,12 @@ export class FlowCreationTransactionBuilder {
 					return;
 				}
 
-				const {user_created, ...operationData} = operation;
+				const { user_created, ...operationData } = operation;
 				resolvedOperation.push(operation.id);
 				operationsPayload.push(operationData);
 
 				this.queue.push({
-					method: 'PATCH',
+					method: "PATCH",
 					path: `/${this.flow.id}`,
 					payload: {
 						operations: operationsPayload,
@@ -102,7 +102,7 @@ export class FlowCreationTransactionBuilder {
 		const operation = this.flow.operation as any;
 
 		this.queue.push({
-			method: 'PATCH',
+			method: "PATCH",
 			path: `/${this.flow.id}`,
 			payload: {
 				operation: operation.id,
@@ -111,7 +111,7 @@ export class FlowCreationTransactionBuilder {
 	}
 
 	private getRoot() {
-		const {operation, operations, user_created, ...rest} = this.flow as any;
+		const { operation, operations, user_created, ...rest } = this.flow as any;
 
 		return {
 			...rest,

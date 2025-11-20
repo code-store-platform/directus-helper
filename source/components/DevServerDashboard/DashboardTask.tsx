@@ -1,19 +1,19 @@
-import React from 'react';
-import {Box, Text} from 'ink';
+import React from "react";
+import { Box, Text } from "ink";
 import {
 	DevServerTaskStatus,
 	StatusChangePayload,
-} from '../../utils/devServer/interfaces.js';
-import {ForegroundColorName} from 'chalk';
-import Spinner from 'ink-spinner';
+} from "../../utils/devServer/interfaces.js";
+import { ForegroundColorName } from "chalk";
+import Spinner from "ink-spinner";
 
 interface Props {
 	name: string;
 	payload: StatusChangePayload;
 }
 
-export const DashboardTask: React.FC<Props> = props => {
-	const {name, payload} = props;
+export const DashboardTask: React.FC<Props> = (props) => {
+	const { name, payload } = props;
 	const status = statusMessage[payload.status];
 
 	return (
@@ -30,22 +30,22 @@ export const DashboardTask: React.FC<Props> = props => {
 
 const statusMessage: Record<
 	DevServerTaskStatus,
-	{title: string; color: ForegroundColorName}
+	{ title: string; color: ForegroundColorName }
 > = {
 	[DevServerTaskStatus.Building]: {
-		title: 'Building',
-		color: 'grey',
+		title: "Building",
+		color: "grey",
 	},
 	[DevServerTaskStatus.Error]: {
-		title: 'Error occured while build',
-		color: 'red',
+		title: "Error occured while build",
+		color: "red",
 	},
 	[DevServerTaskStatus.Done]: {
-		title: 'Build done',
-		color: 'green',
+		title: "Build done",
+		color: "green",
 	},
 	[DevServerTaskStatus.InstallingPackages]: {
-		title: 'Installing packgaes',
-		color: 'yellow'
-	}
+		title: "Installing packgaes",
+		color: "yellow",
+	},
 };

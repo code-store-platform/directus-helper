@@ -21,9 +21,9 @@ const initialValue: ContextValue = {
 			environments: {},
 		},
 	},
-	addEnv: () => { },
-	changeOption: () => { },
-	setSettings: () => { },
+	addEnv: () => {},
+	changeOption: () => {},
+	setSettings: () => {},
 };
 
 const SettingsContext = React.createContext(initialValue);

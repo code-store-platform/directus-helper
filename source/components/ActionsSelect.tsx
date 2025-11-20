@@ -22,10 +22,10 @@ export const ActionsSelect: React.FC<Props> = (props) => {
 		!hasProject && { value: Actions.CreateProject, label: "Create project" },
 		hasProject && { value: Actions.StartDev, label: "Start dev server" },
 		hasProject &&
-		hasProductionTargets && {
-			value: Actions.BuildExtensions,
-			label: "Build extensions",
-		},
+			hasProductionTargets && {
+				value: Actions.BuildExtensions,
+				label: "Build extensions",
+			},
 		hasProject && { value: Actions.ProjectSettings, label: "Project Settings" },
 		{ value: Actions.Exit, label: "Exit" },
 	].filter(Boolean) as Item[];

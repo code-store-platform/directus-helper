@@ -58,7 +58,7 @@ export class DirectusEnvironment {
 
 	constructor(
 		private readonly credentials: TokenDirectusEnvironmentCredentials,
-	) { }
+	) {}
 
 	get urlBuilder() {
 		return new UrlBuilder(this.credentials);
@@ -111,7 +111,8 @@ export class DirectusEnvironment {
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		} catch (e: any) {
 			throw new Error(
-				`Failed to parse response on diff fetch. Maybe instances are already the same\n Response text: ${e.message || responseText || "<empty>"
+				`Failed to parse response on diff fetch. Maybe instances are already the same\n Response text: ${
+					e.message || responseText || "<empty>"
 				}`,
 			);
 		}
