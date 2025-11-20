@@ -3,6 +3,8 @@ export enum Actions {
 	BuildExtensions = "buildExtensions",
 	Migrate = "migrate",
 	CopyToken = "copyToken",
+	MigrateDatabase = "migrateDatabase",
+	AddDatabase = "addDatabase",
 	CreateProject = "createProject",
 	ProjectSettings = "projectSettings",
 	Exit = "exit",

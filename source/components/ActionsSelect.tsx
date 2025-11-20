@@ -17,6 +17,8 @@ export const ActionsSelect: React.FC<Props> = (props) => {
 	const items = [
 		{ value: Actions.Migrate, label: "Migrate" },
 		{ value: Actions.CopyToken, label: "Copy token for env" },
+		{ value: Actions.MigrateDatabase, label: "Migrate database" },
+		{ value: Actions.AddDatabase, label: "Add database" },
 		!hasProject && { value: Actions.CreateProject, label: "Create project" },
 		hasProject && { value: Actions.StartDev, label: "Start dev server" },
 		hasProject && { value: Actions.BuildExtensions, label: "Build extensions" },

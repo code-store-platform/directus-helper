@@ -19,6 +19,7 @@ const initialValue: ContextValue = {
 		project: null,
 		global: {
 			environments: {},
+			databases: {},
 		},
 	},
 	addEnv: () => { },
