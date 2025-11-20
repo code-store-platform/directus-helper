@@ -61,8 +61,7 @@ Options available in project folder:
 
 ## TODO
 - [x] Crossplatform for MacOs/Linux/Windows
-- [] Generate example api extension in fresh project
 - [] Support permissions migration
 - [] Support full db migration
 - [] Generate github/gitlab pipelines
-- [] Support all extension types
+- [x] Support all extension types

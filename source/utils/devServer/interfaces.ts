@@ -3,13 +3,18 @@ export type DevServerStatusChangeCallback = (
 ) => void;
 
 export enum DevServerTaskStatus {
-	Building = 'building',
-	InstallingPackages = 'installingPackages',
-	Done = 'Done',
-	Error = 'Error',
+	Building = "building",
+	InstallingPackages = "installingPackages",
+	Done = "Done",
+	Error = "Error",
 }
 
 export interface StatusChangePayload {
 	status: DevServerTaskStatus;
 	message?: string;
+}
+
+export enum BuildMode {
+	Dev = "dev",
+	Prod = "prod",
 }

@@ -1,14 +1,14 @@
-import React, { useState } from "react";
 import { Box, Text, useInput } from "ink";
-import { ActionsSelect } from "./ActionsSelect.js";
+import React, { useState } from "react";
 import { Actions } from "../constants.js";
-import { DevServerDashboard } from "./DevServerDashboard/DevServerDashboard.js";
-import { BuildMode } from "../utils/devServer/devServerTasks/interface.js";
-import { MigratorDashboard } from "./MigratorDashboard/MigratorDashboard.js";
 import { useBusy } from "../providers/BusyProvider.js";
+import { BuildMode } from "../utils/devServer/interfaces.js";
+import { ActionsSelect } from "./ActionsSelect.js";
 import { CopyTokenScreen } from "./CopyTokenScreen.js";
-import { ProjectSettingsScreen } from "./SettingsScreen/SettingsScreen.js";
+import { DevServerDashboard } from "./DevServerDashboard/DevServerDashboard.js";
+import { MigratorDashboard } from "./MigratorDashboard/MigratorDashboard.js";
 import { ProjectCreationDashboard } from "./ProjectCreationDashboard/ProjectCreationDashboard.js";
+import { ProjectSettingsScreen } from "./SettingsScreen/SettingsScreen.js";
 
 export const AppActionsForm: React.FC = () => {
 	const [action, setAction] = useState<Actions>();

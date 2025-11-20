@@ -12,14 +12,20 @@ interface Props {
 export const ActionsSelect: React.FC<Props> = (props) => {
 	const { onSelection } = props;
 	const title = useMemo(() => figlet.textSync("directus helper", "Small"), []);
-	const hasProject = !!useSettings().settings.project;
+	const { settings } = useSettings();
+	const hasProject = !!settings?.project;
+	const hasProductionTargets = !!settings.project?.targets?.length;
 
 	const items = [
 		{ value: Actions.Migrate, label: "Migrate" },
 		{ value: Actions.CopyToken, label: "Copy token for env" },
 		!hasProject && { value: Actions.CreateProject, label: "Create project" },
 		hasProject && { value: Actions.StartDev, label: "Start dev server" },
-		hasProject && { value: Actions.BuildExtensions, label: "Build extensions" },
+		hasProject &&
+		hasProductionTargets && {
+			value: Actions.BuildExtensions,
+			label: "Build extensions",
+		},
 		hasProject && { value: Actions.ProjectSettings, label: "Project Settings" },
 		{ value: Actions.Exit, label: "Exit" },
 	].filter(Boolean) as Item[];

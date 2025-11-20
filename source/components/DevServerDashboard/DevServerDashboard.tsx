@@ -1,26 +1,29 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Box, Text } from 'ink';
-import { DevServer } from '../../utils/devServer/DevServer.js';
-import { StatusChangePayload } from '../../utils/devServer/interfaces.js';
-import { DashboardTask } from './DashboardTask.js';
-import { BuildMode } from '../../utils/devServer/devServerTasks/interface.js';
-import { DashboardBudge } from './DashboardBudge.js';
-import { DirectusStatusBudge } from './DirectusStatusBudge.js';
-import { useBusy } from '../../providers/BusyProvider.js';
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Text } from "ink";
+import { DevServer } from "../../utils/devServer/DevServer.js";
+import {
+	BuildMode,
+	StatusChangePayload,
+} from "../../utils/devServer/interfaces.js";
+import { DashboardTask } from "./DashboardTask.js";
+import { DashboardBudge } from "./DashboardBudge.js";
+import { DirectusStatusBudge } from "./DirectusStatusBudge.js";
+import { useBusy } from "../../providers/BusyProvider.js";
 
 interface Props {
 	mode?: BuildMode;
 }
 
-export const DevServerDashboard: React.FC<Props> = props => {
+export const DevServerDashboard: React.FC<Props> = (props) => {
 	const devServer = useRef(new DevServer());
 	const [statuses, setStatuses] = useState<Record<string, StatusChangePayload>>(
 		{},
 	);
 	const busy = useBusy();
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
-		devServer.current.onStatusChange(statuses => {
+		devServer.current.onStatusChange((statuses) => {
 			setStatuses({ ...statuses });
 		});
 
@@ -49,7 +52,7 @@ export const DevServerDashboard: React.FC<Props> = props => {
 			>
 				<Text color="green">Dev server</Text>
 				<Box gap={3}>
-					{Object.keys(statuses).map(name => (
+					{Object.keys(statuses).map((name) => (
 						<DashboardTask
 							key={name}
 							name={name}
