@@ -164,7 +164,7 @@ export class DevServer {
 			return "npm run build";
 		}
 
-		return "npm run build:q";
+		return "npm run build --no-minify";
 	}
 
 	protected async copyBuild(extensionPath: string, targets: string[]) {
