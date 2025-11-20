@@ -1,20 +1,48 @@
-# Directus helper
+     _ _            _             _        _
+  __| (_)_ _ ___ __| |_ _  _ ___ | |_  ___| |_ __  ___ _ _
+ / _` | | '_/ -_) _|  _| || (_-< | ' \/ -_) | '_ \/ -_) '_|
+ \__,_|_|_| \___\__|\__|\_,_/__/ |_||_\___|_| .__/\___|_|
+                                            |_|
+## Description
+Directus Helper is a command-line tui utility designed to simplify the development workflow around Directus projects.
+It helps you manage multi-environment configurations, streamline migrations, organize monorepos with many extensions, and automate common development tasks such as building or watching extensions.
+
+Whether you're working with multiple Directus instances (dev/stage/prod), maintaining a large repository, or simply want an easier way to sync configuration between environments, Directus Helper provides a consistent and developer-friendly toolset.
+
+## What it is
+
+* Directus Helper is a CLI tool that:
+* Stores and manages Directus environment credentials (tokens or login/password).
+* Supports configuration migration across environments (fields, flows, permissions, etc.).
+* Recognizes Directus monorepo projects and automates building and managing extensions.
+* Provides tools for developing extensions with automatic rebuild and project scaffolding.
 
 ## Install
 
 ```bash
+npm install -g directus-helper
+```
+
+## Run from source
+
+```bash
 npm ci
-npm run build
-npm link
+npm run dev
+
+# to run the package
+node ./dist/cli.js
 ```
 
 ## How it works?
-After helper instalation and first run you can observe a new file in your
+After you install and run the helper for the first time, a new configuration file is created:
 * macOS: ~/Library/Preferences/directus-helper-nodejs/.settings.json
 * Windows: %APPDATA%\directus-helper-nodejs\Config
 * Linux: ~/.config/directus-helper-nodejs (or $XDG_CONFIG_HOME/directus-helper-nodejs )
 
-This config will hold tokens for your environments and settings for migration script
+This configuration file stores:
+    * Environment tokens or credentials
+    * Migration settings
+    * Global helper preferences
 
 ### Schema of directus.helper.settings
 ```js
@@ -40,11 +68,18 @@ zod.object({
 ```
 
 ### What is an environment?
-In terms of helper - we call environment a combination of link and credentials for it (either token or login&password)
-Environments are heavely used for migration process.
+In the context of this helper, an environment is a Directus instance configuration consisting of:
+    * link — URL of the Directus environment
+    * token, or login + password
+Environments are essential for migration operations.
 
 ### What is a migration?
-Migration - is a process of transfering configuration of one environment (such as fields, flows, permissions) and transfering it to another environment
+A migration is the process of transferring configuration from one Directus environment to another.
+This may include:
+    * Fields
+    * Flows
+    * ~~Permissions~~ (not yet*)
+It allows you to keep environments in sync
 
 ## Projects
 This helper allows manage monorepos that contains a lot of extensions. Helper will recognize the folder as a directus project if it contains file `.settings.json`
@@ -61,7 +96,7 @@ Options available in project folder:
 
 ## TODO
 - [x] Crossplatform for MacOs/Linux/Windows
-- [] Support permissions migration
-- [] Support full db migration
-- [] Generate github/gitlab pipelines
-- [x] Support all extension types
+- [x] Support all extensions types
+- [ ] Support permissions migration
+- [ ] Support full db migration
+- [ ] Generate github/gitlab pipelines
