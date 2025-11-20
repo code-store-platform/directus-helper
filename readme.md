@@ -43,9 +43,9 @@ After you install and run the helper for the first time, a new configuration fil
 * Linux: ~/.config/directus-helper-nodejs (or $XDG_CONFIG_HOME/directus-helper-nodejs )
 
 This configuration file stores:
-    * Environment tokens or credentials
-    * Migration settings
-    * Global helper preferences
+* Environment tokens or credentials
+* Migration settings
+* Global helper preferences
 
 ### Schema of directus.helper.settings
 ```js
@@ -72,16 +72,16 @@ zod.object({
 
 ### What is an environment?
 In the context of this helper, an environment is a Directus instance configuration consisting of:
-    * link — URL of the Directus environment
-    * token, or login + password
+* link — URL of the Directus environment
+* token, or login + password
 Environments are essential for migration operations.
 
 ### What is a migration?
 A migration is the process of transferring configuration from one Directus environment to another.
 This may include:
-    * Fields
-    * Flows
-    * ~~Permissions~~ (not yet*)
+* Fields
+* Flows
+* ~~Permissions~~ (not yet*)
 It allows you to keep environments in sync
 
 ## Projects
@@ -94,8 +94,8 @@ You can create a project by running a helper inside target folder and then selec
 ### How build extensions
 If helper recognize current working directory as a project, it will prompt you with options to build extensions and change project settings
 Options available in project folder:
-- Run dev server: this is a process that will watch for changes in extensions and automaticly trigger build of the extension
-- Build extensions: this will build all extensions with minification
+* Run dev server: this is a process that will watch for changes in extensions and automaticly trigger build of the extension
+* Build extensions: this will build all extensions with minification
 
 ## TODO
 - [x] Crossplatform for MacOs/Linux/Windows
