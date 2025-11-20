@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { Box, Text, useFocus, useFocusManager, useInput } from "ink";
-import { Field } from "./interfaces.js";
+import { Field, Validate } from "./interfaces.js";
 import { BooleanInput } from "../BooleanInput.js";
 import { MultiSelectInput } from "../MultiSelectInput.js";
 import { Button } from "../Button.js";
 import { InputWithLabel } from "../InputWithLabel.js";
 import { useArrowFocus } from "../../hooks/useArrowFocus.js";
 import figlet from "figlet";
+import { IntNumbersRegExp, NumberRegExp } from "../../utils/regexps.js";
 
 interface Props {
 	title?: string;
@@ -44,7 +45,7 @@ export const Form: React.FC<Props> = (props) => {
 	const onSubmit = () => {
 		const errors: Record<string, string> = {};
 		for (const field of props.fields) {
-			if (field.required && !result[field.name]) {
+			if (field.required && field.type === "string" && !result[field.name]) {
 				errors[field.name] = "This field is required";
 			}
 
@@ -56,8 +57,8 @@ export const Form: React.FC<Props> = (props) => {
 				errors[field.name] = "This field is required";
 			}
 
-			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-			const errorMessage = field.validate?.(result[field.name] as any);
+			const validate = field.validate as Validate<unknown> | undefined;
+			const errorMessage = validate?.(result[field.name]);
 
 			if (errorMessage) {
 				errors[field.name] = errorMessage;
@@ -175,6 +176,21 @@ const FieldView = <T extends Field>(field: FieldViewProps<T>) => {
 					label={field.label}
 					focus={field.focused}
 					value={(field.value as string) || ""}
+					onChange={field.onChange}
+				/>
+				{ErrorText}
+			</Box>
+		);
+	}
+
+	if (field.type === "number") {
+		return (
+			<Box borderColor={borderColor} borderStyle="round" flexDirection="column">
+				<InputWithLabel
+					validateRegExp={field.int ? IntNumbersRegExp : NumberRegExp}
+					label={field.label}
+					focus={field.focused}
+					value={(field.value as number)?.toString() || ""}
 					onChange={field.onChange}
 				/>
 				{ErrorText}
