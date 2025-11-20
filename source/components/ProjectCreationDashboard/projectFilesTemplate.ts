@@ -14,7 +14,7 @@ export const dockerComposeFileTemplate = (
 	return `
 services:
   database:
-    image: postgis/postgis:13-master
+    image: postgis/postgis:17-master
     # Required when running on platform other than amd64, like Apple M1/M2:
     # platform: linux/amd64
     volumes:
@@ -77,6 +77,9 @@ data
 /.idea/
 **/.settings.json
 **/logs.log
+**/dist
+**/node_modules
 .DS_Store
+.env
 `.trim();
 };
