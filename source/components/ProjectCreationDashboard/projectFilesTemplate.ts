@@ -74,8 +74,8 @@ export const gitIgnoreFileTemplate = (devTarget: string) => {
 	return `
 ${devTarget}
 data
+uploads
 /.idea/
-**/.settings.json
 **/logs.log
 **/dist
 **/node_modules
