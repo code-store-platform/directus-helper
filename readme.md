@@ -1,8 +1,11 @@
+```txt
      _ _            _             _        _
   __| (_)_ _ ___ __| |_ _  _ ___ | |_  ___| |_ __  ___ _ _
  / _` | | '_/ -_) _|  _| || (_-< | ' \/ -_) | '_ \/ -_) '_|
  \__,_|_|_| \___\__|\__|\_,_/__/ |_||_\___|_| .__/\___|_|
                                             |_|
+```
+
 ## Description
 Directus Helper is a command-line tui utility designed to simplify the development workflow around Directus projects.
 It helps you manage multi-environment configurations, streamline migrations, organize monorepos with many extensions, and automate common development tasks such as building or watching extensions.
