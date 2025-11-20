@@ -4,13 +4,27 @@ import TextInput, { Props as OriginalProps } from "ink-text-input";
 
 interface Props extends OriginalProps {
 	label?: string;
+	validateRegExp?: RegExp;
 }
 
 export const InputWithLabel: React.FC<Props> = (props) => {
-	const { label, ...rest } = props;
+	const { label, onChange, ...rest } = props;
+
+	const handleChange = (value: string) => {
+		if (!props.validateRegExp || !value) {
+			onChange(value);
+			return;
+		}
+
+		if (!props.validateRegExp.test(value)) {
+			return;
+		}
+
+		onChange(value);
+	};
 
 	if (!label) {
-		return <TextInput {...rest} />;
+		return <TextInput {...rest} onChange={handleChange} />;
 	}
 
 	return (
@@ -19,7 +33,7 @@ export const InputWithLabel: React.FC<Props> = (props) => {
 				<Text color="grey">{label}</Text>
 			</Box>
 
-			<TextInput {...rest} />
+			<TextInput {...rest} onChange={handleChange} />
 		</Box>
 	);
 };
