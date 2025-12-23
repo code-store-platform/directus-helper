@@ -39,7 +39,7 @@ export class DevServer {
 		const srcDir = path.resolve(process.cwd(), projectSettings.src_dir);
 		const extensions = await fs.readdir(srcDir);
 
-		return extensions.map((folderBaseName) =>
+		return extensions.filter(folder => !folder.includes('.DS_Store')).map((folderBaseName) =>
 			path.resolve(srcDir, folderBaseName),
 		);
 	}
